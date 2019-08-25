@@ -12,108 +12,167 @@ public class GildedRoseTest {
     private static final String BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert";
 
     @Test
-    public void foo() {
-        Item[] items = new Item[]{new Item("foo", 0, 0)};
-        GildedRose app = new GildedRose(items);
-        app.updateQuality();
-        assertEquals("foo", app.items[0].name);
+    public void testCreateItem() {
+        String initialName = "foo";
+        int initialSellIn = 0;
+        int initialQuality = 0;
+        Item[] items = new Item[]{new Item(initialName, initialSellIn, initialQuality)};
+
+        String expectedName = "foo";
+        int expectedSellIn = 0;
+        int expectedQuality = 0;
+        assertEquals(expectedName, items[0].name);
+        assertEquals(expectedSellIn, items[0].sellIn);
+        assertEquals(expectedQuality, items[0].quality);
     }
 
     @Test
     public void testUpdateOtherItem() {
-        Item[] items = new Item[]{new Item(OTHER_ITEM, 1, 1)};
+        int initialQuality = 1;
+        int initialSellIn = 1;
+        Item[] items = new Item[]{new Item(OTHER_ITEM, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
-        assertEquals(0, app.items[0].sellIn);
-        assertEquals(0, app.items[0].quality);
+
+        int expectedSellIn = 0;
+        int expectedQuality = 0;
+        assertEquals(expectedSellIn, app.items[0].sellIn);
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateOtherItemAfterSellInDate() {
-        Item[] items = new Item[]{new Item(OTHER_ITEM, 0, 10)};
+        int initialQuality = 10;
+        int initialSellIn = 0;
+        Item[] items = new Item[]{new Item(OTHER_ITEM, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
 
         app.updateQuality();
 
-        assertEquals(8, app.items[0].quality);
+        int expectedQuality = 8;
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testQualityIsAlwaysPositiveOrZero() {
-        Item[] items = new Item[]{new Item(OTHER_ITEM, 0, 0)};
+        int initialQuality = 0;
+        int initialSellIn = 0;
+        Item[] items = new Item[]{new Item(OTHER_ITEM, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
-        assertEquals(0, app.items[0].quality);
+
+        int expectedQuality = 0;
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateAgedBrie() {
-        Item[] items = new Item[]{new Item(AGED_BRIE, 1, 0)};
+        int initialQuality = 0;
+        int initialSellIn = 1;
+        Item[] items = new Item[]{new Item(AGED_BRIE, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
-        assertEquals(1, app.items[0].quality);
+
+        int expectedQuality = 1;
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateAgedBrieAfterSellInDate() {
-        Item[] items = new Item[]{new Item(AGED_BRIE, 0, 0)};
+        int initialQuality = 0;
+        int initialSellIn = 0;
+        Item[] items = new Item[]{new Item(AGED_BRIE, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
-        assertEquals(2, app.items[0].quality);
+
+        int expectedQuality = 2;
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testQualityIsAlwaysLowerOrEqualTo50() {
-        Item[] items = new Item[]{
-                new Item(AGED_BRIE, 1, 50)};
+        int initialQuality = 50;
+        int initialSellIn = 1;
+        Item[] items = new Item[]{new Item(AGED_BRIE, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
-        assertEquals(50, app.items[0].quality);
-        assertEquals(50, app.items[1].quality);
+
+        int expectedQuality = 50;
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateSulfuras() {
-        Item[] items = new Item[]{new Item(SULFURAS_HAND_OF_RAGNAROS, 1, 1)};
+        int initialQuality = 1;
+        int initialSellIn = 1;
+        Item[] items = new Item[]{new Item(SULFURAS_HAND_OF_RAGNAROS, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
+
+        int expectedQuality = 1;
         assertEquals(1, app.items[0].sellIn);
-        assertEquals(1, app.items[0].quality);
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateBackStagePassesUsualCase() {
-        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, 30, 1)};
+        int initialQuality = 1;
+        int initialSellIn = 30;
+        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
+
+        int expectedQuality = 2;
         assertEquals(29, app.items[0].sellIn);
-        assertEquals(2, app.items[0].quality);
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateBackStagePassesTenOrLess() {
-        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, 10, 1)};
+        int initialQuality = 1;
+        int initialSellIn = 10;
+        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
+
+        int expectedQuality = 3;
         assertEquals(9, app.items[0].sellIn);
-        assertEquals(3, app.items[0].quality);
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateBackStagePassesFiveOrLess() {
-        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, 5, 1)};
+        int initialQuality = 1;
+        int initialSellIn = 5;
+        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
+
+        int expectedQuality = 4;
         assertEquals(4, app.items[0].sellIn);
-        assertEquals(4, app.items[0].quality);
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 
     @Test
     public void testUpdateBackStagePassesZeroDays() {
-        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, 0, 10)};
+        int initialQuality = 10;
+        int initialSellIn = 0;
+        Item[] items = new Item[]{new Item(BACKSTAGE_PASSES, initialSellIn, initialQuality)};
         GildedRose app = new GildedRose(items);
+
         app.updateQuality();
+
+        int expectedQuality = 0;
         assertEquals(-1, app.items[0].sellIn);
-        assertEquals(0, app.items[0].quality);
+        assertEquals(expectedQuality, app.items[0].quality);
     }
 }
