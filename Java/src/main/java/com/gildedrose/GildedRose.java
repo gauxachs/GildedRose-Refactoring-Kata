@@ -11,6 +11,11 @@ class GildedRose {
 
     Item[] items;
 
+    //TODO:
+    //Create classes and move the logic for each type of item.
+    //Move constants
+    //Check magic numbers
+
     public GildedRose(Item[] items) {
         this.items = items;
     }
@@ -27,20 +32,24 @@ class GildedRose {
     }
 
     private void updateQuality(int i) {
-        if (isAgedBrie(i) || isBackstagePasses(i)) {
+        if (isAgedBrie(i)) {
             increaseQuality(i);
-
-            if (items[i].name.equals(BACKSTAGE_PASSES)) {
-                if (items[i].sellIn < 11) {
-                    increaseQuality(i);
-                }
-
-                if (items[i].sellIn < 6) {
-                    increaseQuality(i);
-                }
+        } else if (isBackstagePasses(i)) {
+            increaseQuality(i);
+            if (items[i].sellIn < 11) {
+                increaseQuality(i);
+            }
+            if (items[i].sellIn < 6) {
+                increaseQuality(i);
             }
         } else {
             decreaseQuality(i);
+        }
+    }
+
+    private void updateSellIn(int i) {
+        if (!isSulfuras(i)) {
+            decreaseSellIn(i);
         }
     }
 
@@ -48,19 +57,12 @@ class GildedRose {
         if (items[i].sellIn < 0) {
             if (isAgedBrie(i)) {
                 increaseQuality(i);
+            } else if (isBackstagePasses(i)) {
+                items[i].quality = items[i].quality - items[i].quality;
             } else {
-                if (isBackstagePasses(i)) {
-                    items[i].quality = items[i].quality - items[i].quality;
-                } else {
-                    decreaseQuality(i);
-                }
+                decreaseQuality(i);
             }
-        }
-    }
 
-    private void updateSellIn(int i) {
-        if (!isSulfuras(i)) {
-            decreaseSellIn(i);
         }
     }
 
