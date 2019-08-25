@@ -26,59 +26,41 @@ class GildedRose {
         }
     }
 
+    private void updateQuality(int i) {
+        if (isAgedBrie(i) || isBackstagePasses(i)) {
+            increaseQuality(i);
+
+            if (items[i].name.equals(BACKSTAGE_PASSES)) {
+                if (items[i].sellIn < 11) {
+                    increaseQuality(i);
+                }
+
+                if (items[i].sellIn < 6) {
+                    increaseQuality(i);
+                }
+            }
+        } else {
+            decreaseQuality(i);
+        }
+    }
+
     private void updateQualityIfSellInHasPassed(int i) {
         if (items[i].sellIn < 0) {
-            if (!isAgedBrie(i)) {
-                if (!isBackstagePasses(i)) {
-
-                    if (items[i].quality > MIN_QUALITY) {
-                        if (!items[i].name.equals(SULFURAS_HAND_OF_RAGNAROS)) {
-                            decreaseQuality(i);
-                        }
-                    }
-                } else {
-                    items[i].quality = items[i].quality - items[i].quality;
-                }
+            if (isAgedBrie(i)) {
+                increaseQuality(i);
             } else {
-                if (items[i].quality < MAX_QUALITY) {
-                    increaseQuality(i);
+                if (isBackstagePasses(i)) {
+                    items[i].quality = items[i].quality - items[i].quality;
+                } else {
+                    decreaseQuality(i);
                 }
             }
         }
     }
 
     private void updateSellIn(int i) {
-        if (!items[i].name.equals(SULFURAS_HAND_OF_RAGNAROS)) {
+        if (!isSulfuras(i)) {
             decreaseSellIn(i);
-        }
-    }
-
-    private void updateQuality(int i) {
-        if (isAgedBrie(i) || isBackstagePasses(i)) {
-            if (items[i].quality < MAX_QUALITY) {
-                increaseQuality(i);
-
-                if (items[i].name.equals(BACKSTAGE_PASSES)) {
-                    if (items[i].sellIn < 11) {
-                        if (items[i].quality < MAX_QUALITY) {
-                            increaseQuality(i);
-                        }
-                    }
-
-                    if (items[i].sellIn < 6) {
-                        if (items[i].quality < MAX_QUALITY) {
-                            increaseQuality(i);
-                        }
-                    }
-                }
-            }
-        } else {
-            if (items[i].quality > MIN_QUALITY) {
-                if (!items[i].name.equals(SULFURAS_HAND_OF_RAGNAROS)) {
-                    decreaseQuality(i);
-                }
-            }
-
         }
     }
 
@@ -90,13 +72,20 @@ class GildedRose {
         return items[i].name.equals(BACKSTAGE_PASSES);
     }
 
+    boolean isSulfuras(int i) {
+        return items[i].name.equals(SULFURAS_HAND_OF_RAGNAROS);
+    }
 
     private void increaseQuality(int i) {
-        items[i].quality = items[i].quality + 1;
+        if (items[i].quality < MAX_QUALITY) {
+            items[i].quality = items[i].quality + 1;
+        }
     }
 
     private void decreaseQuality(int i) {
-        items[i].quality = items[i].quality - 1;
+        if (items[i].quality > MIN_QUALITY && !isSulfuras(i)) {
+            items[i].quality = items[i].quality - 1;
+        }
     }
 
     private void decreaseSellIn(int i) {
