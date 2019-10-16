@@ -1,5 +1,7 @@
 package com.gildedrose;
 
+import java.util.Arrays;
+
 class GildedRose {
 
     private static final String AGED_BRIE = "Aged Brie";
@@ -11,86 +13,82 @@ class GildedRose {
 
     Item[] items;
 
-    //TODO:
-    //Create classes and move the logic for each type of item.
-    //Move constants
-    //Check magic numbers
+    //TODO: Create classes and move the logic for each type of item.
+    //TODO: Move constants to external class.
+    //TODO: Check magic numbers
 
     public GildedRose(Item[] items) {
         this.items = items;
     }
 
-    public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-
-            updateQuality(i);
-
-            updateSellIn(i);
-
-            updateQualityIfSellInHasPassed(i);
-        }
+    void updateQuality() {
+        Arrays.stream(items).forEach(item -> {
+            updateQuality(item);
+            updateSellIn(item);
+            updateQualityIfSellInHasPassed(item);
+        });
     }
 
-    private void updateQuality(int i) {
-        if (isAgedBrie(i)) {
-            increaseQuality(i);
-        } else if (isBackstagePasses(i)) {
-            increaseQuality(i);
-            if (items[i].sellIn < 11) {
-                increaseQuality(i);
+    private void updateQuality(Item item) {
+        if (isAgedBrie(item)) {
+            increaseQuality(item);
+        } else if (isBackstagePasses(item)) {
+            increaseQuality(item);
+            if (item.sellIn < 11) {
+                increaseQuality(item);
             }
-            if (items[i].sellIn < 6) {
-                increaseQuality(i);
+            if (item.sellIn < 6) {
+                increaseQuality(item);
             }
         } else {
-            decreaseQuality(i);
+            decreaseQuality(item);
         }
     }
 
-    private void updateSellIn(int i) {
-        if (!isSulfuras(i)) {
-            decreaseSellIn(i);
+    private void updateSellIn(Item item) {
+        if (!isSulfuras(item)) {
+            decreaseSellIn(item);
         }
     }
 
-    private void updateQualityIfSellInHasPassed(int i) {
-        if (items[i].sellIn < 0) {
-            if (isAgedBrie(i)) {
-                increaseQuality(i);
-            } else if (isBackstagePasses(i)) {
-                items[i].quality = items[i].quality - items[i].quality;
+    private void updateQualityIfSellInHasPassed(Item item) {
+        if (item.sellIn < 0) {
+            if (isAgedBrie(item)) {
+                increaseQuality(item);
+            } else if (isBackstagePasses(item)) {
+                item.quality = 0;
             } else {
-                decreaseQuality(i);
+                decreaseQuality(item);
             }
 
         }
     }
 
-    boolean isAgedBrie(int i) {
-        return items[i].name.equals(AGED_BRIE);
+    boolean isAgedBrie(Item item) {
+        return item.name.equals(AGED_BRIE);
     }
 
-    boolean isBackstagePasses(int i) {
-        return items[i].name.equals(BACKSTAGE_PASSES);
+    boolean isBackstagePasses(Item item) {
+        return item.name.equals(BACKSTAGE_PASSES);
     }
 
-    boolean isSulfuras(int i) {
-        return items[i].name.equals(SULFURAS_HAND_OF_RAGNAROS);
+    boolean isSulfuras(Item item) {
+        return item.name.equals(SULFURAS_HAND_OF_RAGNAROS);
     }
 
-    private void increaseQuality(int i) {
-        if (items[i].quality < MAX_QUALITY) {
-            items[i].quality = items[i].quality + 1;
+    private void increaseQuality(Item item) {
+        if (item.quality < MAX_QUALITY) {
+            item.quality = item.quality + 1;
         }
     }
 
-    private void decreaseQuality(int i) {
-        if (items[i].quality > MIN_QUALITY && !isSulfuras(i)) {
-            items[i].quality = items[i].quality - 1;
+    private void decreaseQuality(Item item) {
+        if (item.quality > MIN_QUALITY && !isSulfuras(item)) {
+            item.quality = item.quality - 1;
         }
     }
 
-    private void decreaseSellIn(int i) {
-        items[i].sellIn = items[i].sellIn - 1;
+    private void decreaseSellIn(Item item) {
+        item.sellIn = item.sellIn - 1;
     }
 }
